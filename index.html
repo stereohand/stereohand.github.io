@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' file:; img-src 'self' file: data:; media-src 'self' file:; script-src 'self' file:; style-src 'self' file:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="StereoHand recovers metric hand motion and camera trajectories from egocentric stereo video.">
+  <meta name="theme-color" content="#ffffff">
+  <title>StereoHand — Geometry-Aware Hand Motion Reconstruction</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="site.css">
+</head>
+<body id="top">
+  <a href="#main" class="skip">Skip to content</a>
+  <header class="wrap masthead">
+    <a class="brand" href="#top" aria-label="StereoHand home"><span class="brand-mark" aria-hidden="true">◧</span> StereoHand</a>
+    <nav aria-label="Main navigation"><a href="#demo">Demo</a><a href="#abstract">Abstract</a><a href="#method">Method</a><a href="#results">Results</a></nav>
+  </header>
+  <main id="main">
+    <section class="wrap hero" aria-labelledby="title">
+      <p class="eyebrow">STEREO VISION · METRIC HAND MOTION</p>
+      <h1 id="title"><span>StereoHand</span><br>Geometry-Aware Hand Motion Reconstruction<br class="wide-only"> from Egocentric Stereo Videos</h1>
+      <p class="hero-summary">Recover where the hands move —<br class="mobile-only"> in the physical world.</p>
+      <div class="project-links"><a class="button primary" href="#demo"><span aria-hidden="true">▷</span> Explore the demo</a><a class="button" href="#method">How it works <span aria-hidden="true">↗</span></a></div>
+      <figure class="hero-figure"><img id="teaser-image" src="assets/figures/teaser.webp" alt="StereoHand comparison illustrating metric hand placement and world-space reconstruction" fetchpriority="high"><figcaption>Stereo geometry places the hands in metric 3D; accurate camera tracking brings their motion into the world.</figcaption></figure>
+      <div class="highlights" aria-label="Key results">
+        <div><strong>16.24 <small>mm</small></strong><span>Absolute joint error · GenHumanEgo</span></div>
+        <div><strong>90.3<small>%</small></strong><span>Lower ATE than stereo DROID-SLAM · EgoSuite</span></div>
+        <div><strong>150 <small>scenes</small></strong><span>Across EgoSuite and GenHumanEgo</span></div>
+      </div>
+    </section>
+
+    <section id="demo" class="wrap section" aria-labelledby="demo-title">
+      <div class="section-heading"><p class="eyebrow">EXPLORE THE RECONSTRUCTION</p><h2 id="demo-title">From an ego view to 3D hand motion.</h2><p>Choose a scene to compare six methods. For each method, we visualize the reconstructed hands as 2D overlays on the left-camera image and as 3D meshes in world coordinates.</p></div>
+      <video id="demo-video" class="demo-film" controls muted playsinline preload="metadata" poster="assets/demo/stereohand-opening.jpg" aria-label="StereoHand demo video">
+        <source src="demo.mp4" type="video/mp4">
+      </video>
+      <div class="review-gallery">
+        <div id="gallery-domains" class="review-domains" role="group" aria-label="Comparison domain">
+          <button type="button" data-gallery-domain="EgoSuite" aria-pressed="true" aria-controls="scene-picker">In-domain <span>EgoSuite</span></button>
+          <button type="button" data-gallery-domain="GenHumanEgo" aria-pressed="false" aria-controls="scene-picker">Out-of-domain <span>GenHumanEgo</span></button>
+        </div>
+        <div id="scene-picker" class="review-scenes" role="group" aria-label="Comparison scenes"></div>
+      </div>
+      <video id="comparison-video" class="demo-film" controls muted playsinline preload="metadata" aria-label="Six-method 2D and 3D comparison"></video>
+      <div class="table-wrap sequence-results">
+        <table aria-label="Sequence-average reconstruction errors"><thead><tr>
+          <th scope="col">Method</th><th scope="col">2D (px)</th><th scope="col">Camera 3D (mm)</th><th scope="col">World 3D (mm)</th>
+        </tr></thead><tbody id="sequence-metrics"></tbody></table>
+      </div>
+    </section>
+
+    <section id="abstract" class="wrap section abstract-section" aria-labelledby="abstract-title">
+      <div class="section-heading"><p class="eyebrow">THE IDEA</p><h2 id="abstract-title">Metric hands. Precise camera motion.</h2></div>
+      <p class="abstract-text">Recovering metric world-space hand motion from egocentric video provides essential geometric demonstrations for embodied learning. Monocular approaches achieve plausible 2D alignment but incur centimeter-scale errors in absolute 3D position, whereas calibrated stereo remains vulnerable to camera tracking drift that corrupts world-space trajectories. To overcome both limitations, we present StereoHand, a unified framework that jointly resolves metric hand localization and stereo camera tracking through a shared geometric foundation model. Specifically, we fuse geometric and stereo foundation features through cross-view alignment and reliability gating to regress MANO parameters in metric camera coordinates. Simultaneously, dense matching descriptors from the same geometric backbone drive a stereo SLAM backend, constraining local rig bundle adjustment and a global keyframe graph with cross-view and temporal correspondences. Across in-domain and out-of-domain benchmarks, StereoHand reduces Abs-MPJPE from 161.05 mm for ACE-Ego-Hand to 16.24 mm on GenHumanEgo and lowers ATE RMSE by 90.3% relative to stereo DROID-SLAM on EgoSuite. Ultimately, by coupling feed-forward geometric priors with explicit stereo constraints, StereoHand delivers accurate, globally consistent hand trajectories for embodied learning.</p>
+    </section>
+
+    <section id="method" class="wrap section" aria-labelledby="method-title">
+      <div class="section-heading"><p class="eyebrow">A UNIFIED STEREO FRAMEWORK</p><h2 id="method-title">Two pathways, one world frame.</h2><p>Stereo evidence supports hand reconstruction and camera tracking within a shared geometric backbone.</p></div>
+      <figure class="paper-figure"><a href="assets/figures/method.webp" target="_blank" rel="noopener" aria-label="Open the method diagram at full resolution"><img id="method-image" src="assets/figures/method.webp" alt="StereoHand pipeline: stereo features support hand localization and MANO reconstruction; dense matching drives local and global rig bundle adjustment" loading="lazy"></a></figure>
+      <div class="method-explanation"><article><span class="step">01 / HAND RECONSTRUCTION</span><h3>Locate the hands in metric 3D.</h3><p>Cross-view alignment and reliability gating combine geometric and stereo features for hand localization and MANO reconstruction.</p></article><article><span class="step">02 / STEREO SLAM</span><h3>Track the camera through the scene.</h3><p>Dense temporal and cross-view correspondences constrain local rig bundle adjustment and a global keyframe graph.</p></article></div>
+    </section>
+
+    <section id="results" class="wrap section" aria-labelledby="results-title">
+      <div class="section-heading"><p class="eyebrow">CAMERA SPACE → WORLD SPACE</p><h2 id="results-title">Better placement. More faithful motion.</h2><p>Evaluation on 100 EgoSuite scenes and 50 GenHumanEgo scenes.</p></div>
+      <div class="results-controls" role="group" aria-label="Result dataset"><button class="dataset-tab" type="button" data-dataset="EgoSuite" aria-pressed="true">EgoSuite</button><button class="dataset-tab" type="button" data-dataset="GenHumanEgo" aria-pressed="false">GenHumanEgo</button></div>
+      <div class="table-wrap"><table id="results-table"><caption id="results-caption">EgoSuite · camera-space hand reconstruction</caption><thead><tr><th scope="col">Method</th><th scope="col">Abs-MPJPE <span>(mm) ↓</span></th><th scope="col">MPJPE <span>(mm) ↓</span></th><th scope="col">PA-MPJPE <span>(mm) ↓</span></th></tr></thead><tbody></tbody></table></div>
+      <div class="pose-highlight"><div><span class="step">STEREO CAMERA TRACKING</span><h3 id="pose-title">1.07 cm ATE on EgoSuite.</h3><p id="pose-copy">Compared with 11.08 cm for stereo DROID-SLAM under SE(3) alignment without scale fitting.</p></div><a class="text-link" href="#demo">Explore the scene geometry <span aria-hidden="true">↗</span></a></div>
+      <figure class="paper-figure result-figure"><img id="camera-image" src="assets/figures/camera.webp" alt="Camera-space comparison across monocular and stereo hand reconstruction methods" loading="lazy"><figcaption><strong>Camera-space reconstruction.</strong> RGB overlays show articulation, while side views reveal differences in metric placement.</figcaption></figure>
+      <figure class="paper-figure result-figure"><img id="world-image" src="assets/figures/world.webp" alt="World-space qualitative comparison between WiLoR-SLAM, HaWoR, ACE-SLAM, MINT, InfiniHand, StereoHand and ground truth" loading="lazy"><figcaption><strong>World-space reconstruction.</strong> Compare articulated poses and the spatial extent of recovered hand motion.</figcaption></figure>
+    </section>
+  </main>
+  <footer class="wrap"><a class="brand" href="#top">StereoHand</a><p>Geometry-aware hand motion reconstruction from egocentric stereo videos.</p></footer>
+  <script src="review.js" defer></script>
+</body>
+</html>
