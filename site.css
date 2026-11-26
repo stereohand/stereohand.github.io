@@ -1,7 +1,8 @@
 :root{--ink:#203932;--muted:#60716a;--accent:#315f4c;--line:#dce5df;--soft:#f3f7f4;--blue:#477a9b;--purple:#9276b6;--orange:#be7d39}
 .paper-credit{margin:22px auto 0;max-width:64rem;line-height:1.5}
-.paper-authors,.paper-affiliations{display:flex;flex-wrap:wrap;justify-content:center;padding:0;margin:0;list-style:none}
-.paper-authors{gap:4px 18px;color:var(--ink);font-size:clamp(1rem,2vw,1.2rem);font-weight:600}
+.paper-author-row,.paper-affiliations{display:flex;flex-wrap:wrap;justify-content:center;padding:0;margin:0;list-style:none}
+.paper-authors{display:grid;gap:4px;color:var(--ink);font-size:clamp(1rem,2vw,1.2rem);font-weight:600}
+.paper-author-row{gap:4px 18px}
 .paper-affiliations{gap:4px 16px;margin-top:8px;color:var(--muted);font-size:clamp(.875rem,1.6vw,1rem)}
 .paper-credit sup{font-size:.7em;line-height:0;margin-inline-start:.15em}
 .paper-affiliations sup{margin-inline:0 .25em}
